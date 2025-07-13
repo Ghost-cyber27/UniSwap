@@ -1,26 +1,28 @@
-import { Assets as NavigationAssets } from '@react-navigation/elements';
-import { DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { Asset } from 'expo-asset';
+//import { Asset } from 'expo-asset';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
-import { useColorScheme } from 'react-native';
-import { Navigation } from './navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import { RootStack } from './navigation';
 
-Asset.loadAsync([
+/*Asset.loadAsync([
   ...NavigationAssets,
   require('./assets/newspaper.png'),
   require('./assets/bell.png'),
-]);
+]);*/
 
 SplashScreen.preventAutoHideAsync();
 
 export function App() {
-  const colorScheme = useColorScheme();
-
-  const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme
-
   return (
-    <Navigation
+    <NavigationContainer onReady={() => {
+        SplashScreen.hideAsync();
+      }}>
+      <RootStack/>
+    </NavigationContainer>
+  );
+}
+/*
+<Navigation
       theme={theme}
       linking={{
         enabled: 'auto',
@@ -33,5 +35,4 @@ export function App() {
         SplashScreen.hideAsync();
       }}
     />
-  );
-}
+*/
