@@ -9,10 +9,7 @@ import { Search } from './screens/Search';
 import { Login } from './screens/auth/login';
 import { Signup } from './screens/auth/signup';
 import { ForgotPassword } from './screens/auth/forgotPassword';
-import Feather from '@expo/vector-icons/Feather';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Entypo from '@expo/vector-icons/Entypo';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { TabBar } from '../component/TabBar';
 
 
 // Define your RootStackParamList for type checking
@@ -28,125 +25,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Tab = createBottomTabNavigator();
 
-const HomeIcon = ({focused} : any) => {
-  if(focused){
-    return(
-      <View style={{flexDirection: "row" ,width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Feather name="home" size={25} color="black"/>
-        <Text>Home</Text>
-      </View>
-    )
-  }else{
-    return(
-      <View style={{width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Feather name="home" size={25} color="black"/>
-      </View>
-    )
-  }
-}
-const SearchIcon = ({focused} : any) => {
-  if(focused){
-    return(
-      <View style={{ flexDirection: "row" ,width: 50, justifyContent: "center", alignItems: "center"}}>
-          <FontAwesome name="search" size={24} color="black"/>
-          <Text>Search</Text>
-      </View>
-    )
-  }else{
-    return(
-      <View style={{width: 50, justifyContent: "center", alignItems: "center"}}>
-        <FontAwesome name="search" size={24} color="black"/>
-      </View>
-    )
-  }
-}
-const UploadIcon = ({focused} : any) => {
-  if(focused){
-    return(
-      <View style={{flexDirection: "row" ,width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Entypo name="upload" size={24} color="black"/>
-        <Text>Upload</Text>
-      </View>
-    )
-  }else{
-    return(
-      <View style={{width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Entypo name="upload" size={24} color="black"/>
-      </View>
-    )
-  }
-}
-const ChatIcon = ({focused} : any) => {
-  if(focused){
-    return(
-      <View style={{flexDirection: "row" ,width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Entypo name="chat" size={24} color="black"/>
-        <Text>Chat</Text>
-      </View>
-    )
-  }else{
-    return(
-      <View style={{width: 50, justifyContent: "center", alignItems: "center"}}>
-        <Entypo name="chat" size={24} color="black"/>
-      </View>
-    )
-  }
-}
-const ProfileIcon = ({focused} : any) => {
-  if(focused){
-    return(
-      <View style={{flexDirection: "row" ,width: 50, justifyContent: "center", alignItems: "center"}}>
-        <AntDesign name="profile" size={24} color="black"/>
-        <Text>Profile</Text>
-      </View>
-    )
-  }else{
-    return(
-      <View style={{width: 50, justifyContent: "center", alignItems: "center"}}>
-        <AntDesign name="profile" size={24} color="black"/>
-      </View>
-    )
-  }
-}
-
 function HomeTabs(){
   return(
-    <Tab.Navigator>
-      <Tab.Screen name= "Home" component={Home} options={{
-        title: "",
-        headerShown: false,
-        tabBarIcon: ({focused}) => (
-          <HomeIcon focused={focused}/>
-        )
-      }}/>
-      <Tab.Screen name= "Search" component={Search} options={{
-        title: "",
-        headerShown: false,
-        tabBarIcon: ({focused}) => (
-          <SearchIcon focused={focused}/>
-        )
-      }}/>
-      <Tab.Screen name= "Upload" component={Upload} options={{
-        title: "",
-        headerShown: false,
-        tabBarIcon: ({focused}) => (
-        <UploadIcon focused={focused}/>
-        )
-      }}/>
-      <Tab.Screen name= "Chat" component={Chat} options={{
-        title: "",
-        headerShown: false,
-        tabBarIcon: ({focused}) => (
-          <ChatIcon focused={focused}/>
-        )
-      }}/>
-      <Tab.Screen name= "Profile" component={Profile} options={{
-        title: "",
-        headerShown: false,
-        tabBarIcon: ({focused}) => (
-          <ProfileIcon focused={focused} />
-        )
-      }}/>
+    <Tab.Navigator tabBar={(props) => <TabBar {...props}/>} screenOptions={{ headerShown: true}}>
+      <Tab.Screen name= "home" component={Home} />
+      <Tab.Screen name= "search" component={Search} />
+      <Tab.Screen name= "upload" component={Upload} />
+      <Tab.Screen name= "chat" component={Chat} />
+      <Tab.Screen name= "profile" component={Profile} />
     </Tab.Navigator>
   );
 }
@@ -157,7 +43,7 @@ function RootStack(){
       <Stack.Screen name= "Login" component={Login}/>
       <Stack.Screen name= "Signup" component={Signup}/>
       <Stack.Screen name= "ForgotPassword" component={ForgotPassword}/>
-      <Stack.Screen name= "HomeTabs" component={HomeTabs}/>
+      <Stack.Screen name= "HomeTabs" component={HomeTabs} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 }

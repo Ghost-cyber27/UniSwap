@@ -9,7 +9,6 @@ export function Home() {
       <Button screen="Profile" params={{ user: 'jane' }}>
         Go to Profile
       </Button>
-      <Button screen="Settings">Go to Settings</Button>
     </View>
   );
 }
