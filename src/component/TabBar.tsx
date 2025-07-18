@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable, LayoutChangeEvent } from 'react-native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -69,16 +70,16 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
         const icon = () => {
           switch (route.name) {
-            case "home":
-              return <Feather name="home" size={25} style={{ color: isFocused ? '#fff' : '#222' }}/>;
-            case "search":
-              return <FontAwesome name="search" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
-            case "upload":
-              return <Entypo name="upload" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
-            case "chat":
-              return <Entypo name="chat" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
-            case "profile":
-              return <AntDesign name="profile" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
+            case "Home":
+              return <Ionicons name="home-outline" size={25} style={{ color: isFocused ? '#fff' : '#222' }}/>;
+            case "Search":
+              return <Ionicons name="search-outline" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
+            case "Upload":
+              return <Ionicons name="share-outline" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
+            case "Chat":
+              return <Ionicons name="chatbubble-outline" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
+            case "Profile":
+              return <Ionicons name="person-outline" size={24} style={{ color: isFocused ? '#fff' : '#222' }}/>;
             default:
               return null;
           }
@@ -131,6 +132,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     </View>
   );
 }
+//<Ionicons name='notifications-circle-outline' size={24}/>
 
 const styles = StyleSheet.create({
     tabbar: {

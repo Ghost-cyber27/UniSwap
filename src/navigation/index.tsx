@@ -28,11 +28,11 @@ const Tab = createBottomTabNavigator();
 function HomeTabs(){
   return(
     <Tab.Navigator tabBar={(props) => <TabBar {...props}/>} screenOptions={{ headerShown: true}}>
-      <Tab.Screen name= "home" component={Home} />
-      <Tab.Screen name= "search" component={Search} />
-      <Tab.Screen name= "upload" component={Upload} />
-      <Tab.Screen name= "chat" component={Chat} />
-      <Tab.Screen name= "profile" component={Profile} />
+      <Tab.Screen name= "Home" component={Home} />
+      <Tab.Screen name= "Search" component={Search} />
+      <Tab.Screen name= "Upload" component={Upload} />
+      <Tab.Screen name= "Chat" component={Chat} />
+      <Tab.Screen name= "Profile" component={Profile} />
     </Tab.Navigator>
   );
 }
