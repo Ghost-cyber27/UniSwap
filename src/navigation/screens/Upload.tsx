@@ -2,40 +2,24 @@ import { useState } from 'react';
 import { StyleSheet, View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import * as ImagePicker from 'expo-image-picker';
+import { ImagePickerAsset } from 'expo-image-picker';
 import Entypo from '@expo/vector-icons/Entypo';
 import { pickMultiImage } from '../../services/pickImage';
 
 export function Upload() {
   const [value, setValue] = useState(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<ImagePickerAsset[]>([]);
   const [name, setName] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
   const [price, setPrice] = useState<string>('');
   const [checked, setChecked] = useState<boolean>(false);
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
-      aspect: [4, 3],
-      quality: 1,
-      allowsMultipleSelection: true
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      console.log('///////////////////////////////////////////////////////////');
-      let info = result.assets
-      console.log(info);
-      setImage(result.assets[0].uri);
-      Alert.alert('Image Upload', 'This button is for upload')
-    }
+    const images = await pickMultiImage();
+    setImage(images);
   };
+  //wYBJlUWzZURoEesE
 
-  const picking = () => {
-    
-  }
 
   const data = [
     { label: 'Men Clothing', value: '1' },
@@ -57,7 +41,7 @@ export function Upload() {
   return (
     <View style={styles.container}>
       <View style={styles.imgBorder}>
-        {image ? <Image source={{ uri: image }} style={{width: 330, height: 180, resizeMode: "center"}}/> : <Entypo name="upload" size={100} style={{ color: '#222' }} onPress={() => pickImage()}/>}
+        {image ? <Image source={{ uri: image[0].uri }} style={{width: 330, height: 180, resizeMode: "center"}}/> : <Entypo name="upload" size={100} style={{ color: '#222' }} onPress={() => pickImage()}/>}
       </View>
       <View style={{gap: 10}}>
         <TextInput
