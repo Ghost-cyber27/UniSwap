@@ -9,10 +9,19 @@
     "newArchEnabled": true,
     "scheme": "uniswap",
     "ios": {
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photos to let you pick an image.",
+        "NSCameraUsageDescription": "This app needs access to your camera to take photos."
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.satya164.reactnavigationtemplate"
     },
     "android": {
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.jpg",
         "backgroundColor": "#ffffff"

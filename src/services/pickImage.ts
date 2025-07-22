@@ -19,9 +19,16 @@ const pickOneImage = async (): Promise<ImagePickerAsset | null> => {
 
       console.log(result);
       
-      if (!result.canceled) {
+      if (result.canceled) {
+        console.log('Image picker canceled');
+
+        return null;
+      }
+      if (result.assets && result.assets.length > 0) {
+        console.log('Successful picked an image');
         return result.assets[0];
-      }else { 
+      } else {
+        console.log('No asset found');
         return null;
       }
     } catch (error) {
@@ -49,11 +56,18 @@ const pickMultiImage = async (): Promise<ImagePickerAsset[]> => {
         selectionLimit: 4
       });
 
-      if (!result.canceled) {
+      if (result.canceled) {
+        console.log('Image picker canceled');
+        return [];
+      }
+      if (result.assets && result.assets.length > 0) {
+        console.log('Successful picked an image');
         return result.assets;
       } else {
-        return[];
+        console.log('No asset found');
+        return [];
       }
+      
       } catch (error) {
         console.error(error);
         alert('An Error Occurred while picking the images')
