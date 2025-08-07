@@ -1,21 +1,23 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 interface Props {
+    id: string,
     name: string;
-    price: number;
-    image: ImageSourcePropType;
+    price: string;
+    image: string[];
+    onPress: () => void
 }
 
-const SearchCard = ({image, name, price} : Props) => {
+const SearchCard = ({image, name, price, onPress} : Props) => {
     return(
         <View>
-            <TouchableOpacity style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={onPress}>
                 <View style={{padding: 5}}>
-                    <Image source={image} style={styles.img}/>
+                    <Image source={{uri: image[0]}} style={styles.img}/>
                 </View>
                 <View style={{justifyContent: "center"}}>
                     <Text style={styles.textName}>{name}</Text>
-                    <Text style={styles.textPrice}>{price}</Text>
+                    <Text style={styles.textPrice}>₦{price}</Text>
                 </View>
             </TouchableOpacity>
         </View>

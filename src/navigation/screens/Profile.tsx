@@ -1,4 +1,9 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Alert, View, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { authService } from '../../services/auth';
+import { User } from '@supabase/supabase-js';
+import LoadingIndicator from '../../component/LoadingIndicator';
+
 
 /*type Props = StaticScreenProps<{
   user: string;
@@ -7,27 +12,78 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 {route.params.user}*/
 
 /*
-edit profile
-view product listing
-favorites
-terms and conditions
-privacy
-about
+storing metadata with auth
 */
 
 export function Profile() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [matric, setMatric] = useState("");
+  const [uni, setUni] = useState("");
+  const [state, setState] = useState("");
+
+  useEffect(() => {
+    fetchUserData();
+  }, [])
+
+  const fetchUserData = async () => {
+    setLoading(true);
+    const { user: currentUser, error } = await authService.getCurrentUser();
+    setLoading(false);
+
+    if (error) {
+      Alert.alert('Error', error.message);
+      return;
+    }
+
+    if (currentUser) {
+      setUser(currentUser);
+      setName(currentUser.user_metadata?.name || '');
+      setPhone(currentUser.user_metadata?.phone || '');
+      setMatric(currentUser.user_metadata?.matric || '');
+      setUni(currentUser.user_metadata?.uni || '');
+      setState(currentUser.user_metadata?.state || '');
+      // setWebsite(currentUser.user_metadata?.website || '');
+    }
+  };
+
+  const handleLogout = async () => {
+    setLoading(true);
+    const { error } = await authService.signOut();
+    setLoading(false);
+
+    if (error) {
+      Alert.alert('Logout Error', error.message);
+    } else {
+      // Navigation will be handled by the App.tsx's auth state listener
+      Alert.alert('Success', 'Logged out successfully!');
+    }
+  };
+
+  if (!user) {
+      return (
+        <View style={styles.container}>
+          <LoadingIndicator isLoading={true} />
+          <Text style={styles.loadingText}>Loading profile...</Text>
+        </View>
+      );
+    }
+
+
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: "row", gap: 5}}>
+      <View style={{flexDirection: "row", gap: 5,}}>
         <View style={styles.imgView}>
           <Image style={styles.img} source={require("C:/Users/HP PC/Documents/react native projects/upcoming/UniSwap/assets/logo.jpg")}/>
         </View>
         <View style={styles.profileInfoView}>
-          <Text style={styles.profileInfoText}><Text>.</Text> Isaac Lekwot</Text>
-          <Text style={styles.profileInfoText}><Text>.</Text> Kasu/18/CSC/1082</Text>
-          <Text style={styles.profileInfoText}><Text>.</Text> ilekwot2@gmail.com</Text>
-          <Text style={styles.profileInfoText}><Text>.</Text> Kaduna State University</Text>
-          <Text style={styles.profileInfoText}><Text>.</Text> No. of listing: 4</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {name}</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {matric}</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {user.email}</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {uni}</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> No. of listing: 4</Text>
         </View>
       </View>
       <View style={styles.contentView}>
@@ -43,8 +99,8 @@ export function Profile() {
         <TouchableOpacity>
           <Text style={styles.contentText}>Terms and Condition</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.contentText}>About</Text>
+        <TouchableOpacity onPress={() => handleLogout()}>
+          <Text style={styles.contentText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -54,7 +110,13 @@ export function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5
+    padding: 5,
+    paddingTop: 50
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: '#555',
   },
   imgView: {
     width: 150,
@@ -107,3 +169,5 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   }
 });
+
+

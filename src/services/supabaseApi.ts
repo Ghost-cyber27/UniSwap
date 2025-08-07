@@ -13,7 +13,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     detectSessionInUrl: false,
     lock: processLock,
   },
-})
+});
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue
@@ -26,5 +26,5 @@ AppState.addEventListener('change', (state) => {
   } else {
     supabase.auth.stopAutoRefresh()
   }
-})
-//₦
+});
+console.log('Supabase client initialized.');

@@ -21,13 +21,20 @@ export const storeProduct = async (
     image: string[]
 ): Promise<productListing> => {
     const { data, error } = await supabase.from('products').insert(
-        {name: name, price: price, description: description, seller: seller, category: category, image: image})
-    
-    if (error && error.code !== 'PGRST116') {
-        console.error('Error creating profile: ', error);
-        Alert.alert('Error', 'Failed to create profile');
-        return [];
+        {name: name, price: price, description: description, seller: seller, category: category, image: image}).select();
+
+    if (error) {
+        console.error('Error storing product: ', error);
+        Alert.alert('Error', 'Failed to store product: ' + error.message);
+        return []; // Indicate failure
     }
-    console.log("Successfully stored products");
-    return data as unknown as productListing
+
+    if (!data || data.length === 0) {
+        // This case should be rare if select() is used and no RLS prevents return
+        console.warn('Product stored but no data returned.');
+        return []; // Assume success if no error, but no data returned. Adjust based on your RLS.
+    }
+
+    console.log("Successfully stored product:", data);
+    return data as unknown as productListing; // Indicate success
 }

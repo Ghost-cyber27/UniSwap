@@ -3,16 +3,30 @@ import {
   SafeAreaView, 
   StyleSheet, 
   View, 
-  ScrollView, 
-  Text, 
-  TouchableOpacity,
-  FlatList 
+  Text,
+  FlatList,
+  ActivityIndicator 
 } from 'react-native';
 import { Category, buttonItem } from '../../component/category';
+import { ProductCard } from '../../component/productCard';
+import { useFetch } from '../../services/useFetch';
+import { fetchProduct } from '../../services/fetchData';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { AppStackParamList } from '..';
+
+type HomeTabsScreenNavigationProp = NavigationProp<AppStackParamList, 'HomeTabs'>;
 
 export function Home() {
-  const [isFocused, setIsFocused] = useState<string>("1");
+  const [isFocused, setIsFocused] = useState<string | null>(null);
+  const navigation = useNavigation<HomeTabsScreenNavigationProp>();
 
+  const { 
+    data, 
+    loading: productLoading, 
+    error: productError 
+  } = useFetch(() => fetchProduct(isFocused));
+  
   const category = [
     {title: "All", id: "1", defaultColor: "white", pressedColor: "black"},
     {title: "Men Clothing", id: "2", defaultColor: "white", pressedColor: "blue"},
@@ -26,19 +40,33 @@ export function Home() {
   const handleButtonPress = (buttonId: string) => {
     console.log("button id: ", buttonId);
     if (buttonId == "1") {
-      setIsFocused("1");
+      setIsFocused(null);
+      console.log("----------------");
+      console.log(isFocused);
     } else if (buttonId == "2") {
-      setIsFocused("2");
+      setIsFocused("Men Clothing");
+      console.log("----------------");
+      console.log(isFocused)
     }else if (buttonId == "3") {
-      setIsFocused("3");
+      setIsFocused("Woman Clothing");
+      console.log("----------------");
+      console.log(isFocused)
     } else if (buttonId == "4") {
-      setIsFocused("4");
+      setIsFocused("Electronics");
+      console.log("----------------");
+      console.log(isFocused)
     } else if (buttonId == "5") {
-      setIsFocused("5");
+      setIsFocused("Beauty");
+      console.log("----------------");
+      console.log(isFocused)
     } else if (buttonId == "6") {
-      setIsFocused("6");
+      setIsFocused("Computing");
+      console.log("----------------");
+      console.log(isFocused)
     } else if (buttonId == "7") {
-      setIsFocused("7");
+      setIsFocused("Phone & Tablet");
+      console.log("----------------");
+      console.log(isFocused)
     }
   }
 
@@ -52,39 +80,56 @@ export function Home() {
     />
   );
 
-  const product = () => {
-    if (isFocused == "1") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 1</Text>
-    } else if (isFocused == "2") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 2</Text>
-    }else if (isFocused == "3") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 3</Text>
-    }else if (isFocused == "4") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 4</Text>
-    }else if (isFocused == "5") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 5</Text>
-    }else if (isFocused == "6") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 6</Text>
-    }else if (isFocused == "7") {
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>Product 7</Text>
-    }else{
-      return <Text style={{fontSize: 24, fontWeight: "bold"}}>No Product</Text>
-    }
-  }
-
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <View>
+        <View style={{flexDirection: 'row', padding: 5, marginTop: 20, justifyContent: 'center', borderBottomWidth: 1}} >
+          <Text style={{ fontSize: 24, padding: 10, fontWeight: "500", left: '5%' }}>Discover</Text>
+          <Ionicons name="notifications-circle-outline" size={40} color='black' style={{left: '25%', top: '20%'}} />
+        </View>
         <Text style={{ fontSize: 24, padding: 10, fontWeight: "500" }}>Categories</Text>
-        <FlatList 
-          data={category}
-          renderItem={renderButtonItem}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
-        {product()}
-      </ScrollView>
+        <View>
+          <FlatList 
+            data={category}
+            renderItem={renderButtonItem}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        {productLoading ? (
+          <ActivityIndicator
+            size="large"
+            color= 'black'
+            style={{margin: 10, justifyContent: "center"}}
+          />
+          ) : productError ? (
+            <Text>Error: {productError?.message}</Text>
+          ): (
+          <FlatList
+              data={data}
+              renderItem={({item}) => 
+              <ProductCard 
+                  id={item.id} 
+                  image={item.images} 
+                  name={item.name} 
+                  price={item.price}
+                  onPress={() => navigation.navigate("Details",{
+                    Id: item.id,
+                    name: item.name,
+                    price :item.price,
+                    description: item.description,
+                    images: item.images,
+                    likes: item.likes,
+                    seller: item.seller,
+                    category: item.category
+                  })}
+              />}
+              keyExtractor={(item) => item.id}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+          />)}
+      </View>
     </SafeAreaView>
   );
 }

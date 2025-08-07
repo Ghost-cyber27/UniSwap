@@ -2,10 +2,6 @@ import { useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable, LayoutChangeEvent } from 'react-native';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Feather from '@expo/vector-icons/Feather';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Entypo from '@expo/vector-icons/Entypo';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring, } from 'react-native-reanimated';
 
 

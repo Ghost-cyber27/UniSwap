@@ -8,7 +8,7 @@ interface products {
     description: string;
     seller: string;
     category: string;
-    image: string[];
+    images: string[];
     likes: number;
 }
 
@@ -19,18 +19,19 @@ export const fetchProduct = async (query: string | null): Promise<productListing
         const { data, error } = query 
         ? await supabase
         .from('products')
-        .select('id, name, price, description, seller, category, image, likes')
-        .eq('category', query)
+        .select('*') 
+        .eq("name", query)
         : await supabase
         .from('products')
-        .select('id, name, price, description, seller, category, image, likes')
-        .eq('category', query);
+        .select('*')
+        ;
 
         if (error && error.code !== 'PGRST116') {
             console.error('Error fetching profile: ', error);
             Alert.alert('Error', 'Failed to fetch user profile');
             return null;
         }
+        console.log('this is the data: ', data);
         return data as productListing | null;
     } catch (error) {
         console.error(error);
