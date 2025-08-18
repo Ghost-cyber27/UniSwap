@@ -1,58 +1,80 @@
-import { Text } from '@react-navigation/elements';
-import { StyleSheet, View } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, SafeAreaView, ActivityIndicator} from 'react-native';
+import { ChatListing } from '../../component/ChatListing';
+import { supabase } from '../../services/supabaseApi';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { AppStackParamList } from '..';
+
+type HomeTabsScreenNavigationProp = NavigationProp<AppStackParamList, 'HomeTabs'>;
+
+interface Message {
+  id: string;
+  text: string;
+  sendername: string;
+  username: string;
+  created_at: string;
+  readMessage: boolean;
+}
+
+//add a boolean attribute to the table
 
 export function Chat() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation<HomeTabsScreenNavigationProp>();
+
+  const fetchMessages = async () => {
+    try {
+      const {data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .order('created_at', {ascending: true});
+
+      if(error) throw error;
+      setLoading(false);
+      setMessages(data || []);
+      console.log("successful")
+    } catch (error) {
+      console.log('Error fetching: ', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [])
+
+  const data = [
+    {id: '1', name: 'Isaac', message: "Hello there, ready to make a purchase", bool: true},
+    {id: '2', name: 'Jessica', message: "Ready for hook up", bool: false}];
+
   return (
-    <View style={styles.container}>
-      <Text>Chat Screen</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      {loading 
+      ? <ActivityIndicator size={30}/> 
+      : <FlatList 
+        data={messages}
+        renderItem={({ item }) => <ChatListing created_at={item.created_at} name={item.sendername} onPress={() => navigation.navigate('ChatDetails', {
+          id: item.id,
+          username: item.username,
+          sendername: item.sendername,
+          text: item.text,
+          created_at: item.created_at,
+          readMessage: item.readMessage
+        })} activeMessage={item.readMessage} />}
+      />}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 10,
     gap: 10,
+    backgroundColor: 'white'
   },
   row: {
     flexDirection: 'row',
     gap: 10,
   },
 });
-/*
-// screens/DetailsScreen.tsx
-import * as React from 'react';
-import { View, Text, Button } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../App'; // Import your RootStackParamList
-
-// Define the type for the route prop of DetailsScreen
-type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
-
-// Define the type for the navigation prop of DetailsScreen (if you also need to navigate from here)
-type DetailsScreenNavigationProp = NavigationProp<RootStackParamList, 'Details'>;
-
-function DetailsScreen() {
-  const route = useRoute<DetailsScreenRouteProp>();
-  const navigation = useNavigation<DetailsScreenNavigationProp>();
-
-  // Destructure params with type safety
-  const { itemId, otherParam } = route.params;
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <Text>Item ID: {JSON.stringify(itemId)}</Text>
-      {otherParam && <Text>Other Param: {JSON.stringify(otherParam)}</Text>}
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-      <Button title="Go to Details again" onPress={() => navigation.push('Details', { itemId: Math.random() })} />
-      <Button title="Go back to first screen in stack" onPress={() => navigation.popToTop()} />
-    </View>
-  );
-}
-
-export default DetailsScreen;
-*/

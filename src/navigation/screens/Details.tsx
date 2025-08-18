@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, FlatList } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import { AppStackParamList } from ".."; 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -48,10 +48,15 @@ export function Details(){
           </View>
         </View>
       <View style={{backgroundColor: "white", borderBottomWidth: 1, height: '15%', width: '100%', flexDirection: "row", justifyContent: "space-between", padding: 5}}>
-        {images.map((item, i) => (<TouchableOpacity style={{elevation: 5}} onPress={() => setImg(item)}><Image source={{uri: item}} key={i} style={{width: 80, height: 80, marginTop: 10, borderRadius: 10}} /></TouchableOpacity>))}
+        <FlatList 
+          data={images}
+          renderItem={({ item }) => <TouchableOpacity style={{elevation: 5, margin: 4}} onPress={() => setImg(item)}><Image source={{uri: item}} style={{width: 80, height: 80, marginTop: 10, borderRadius: 10}} /></TouchableOpacity>}
+          horizontal
+        />
+        {/*images.map((item, i) => (<TouchableOpacity style={{elevation: 5}} onPress={() => setImg(item)}><Image source={{uri: item}} key={i} style={{width: 80, height: 80, marginTop: 10, borderRadius: 10}} /></TouchableOpacity>))*/}
       </View>
       <View style={{padding: 10, backgroundColor: "white", height: 'auto'}}>
-        <View style={{ flexDirection: "row", gap: 200 }}>
+        <View style={{ flexDirection: "row", gap: 150 }}>
           <Text style={{ fontSize: 24, fontWeight: "500" }}>{name}</Text>
           <Text style={{ 
             fontSize: 16, 
@@ -77,7 +82,7 @@ export function Details(){
         position: "absolute",
         top: '85%',
         borderTopWidth: 1,
-        gap: 100,
+        gap: 80,
         padding: 10,
         backgroundColor: "white"
          }}>

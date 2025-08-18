@@ -3,6 +3,7 @@ import { StyleSheet, Alert, View, Text, TouchableOpacity, Image, ActivityIndicat
 import { authService } from '../../services/auth';
 import { User } from '@supabase/supabase-js';
 import LoadingIndicator from '../../component/LoadingIndicator';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 /*type Props = StaticScreenProps<{
@@ -18,11 +19,11 @@ storing metadata with auth
 export function Profile() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [matric, setMatric] = useState("");
-  const [uni, setUni] = useState("");
-  const [state, setState] = useState("");
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
+  const [matric, setMatric] = useState();
+  const [uni, setUni] = useState();
+  const [state, setState] = useState();
 
   useEffect(() => {
     fetchUserData();
@@ -76,13 +77,14 @@ export function Profile() {
     <View style={styles.container}>
       <View style={{flexDirection: "row", gap: 5,}}>
         <View style={styles.imgView}>
-          <Image style={styles.img} source={require("C:/Users/HP PC/Documents/react native projects/upcoming/UniSwap/assets/logo.jpg")}/>
+          <Ionicons name="person-outline" size={40} color=' black'/>
+          {/*<Image style={styles.img} source={require("C:/Users/HP PC/Documents/react native projects/upcoming/UniSwap/assets/logo.jpg")}/>*/}
         </View>
         <View style={styles.profileInfoView}>
           <Text style={styles.profileInfoText}><Text>{'>'}</Text> {name}</Text>
           <Text style={styles.profileInfoText}><Text>{'>'}</Text> {matric}</Text>
           <Text style={styles.profileInfoText}><Text>{'>'}</Text> {user.email}</Text>
-          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {uni}</Text>
+          <Text style={styles.profileInfoText}><Text>{'>'}</Text> {user.user_metadata?.uni}</Text>
           <Text style={styles.profileInfoText}><Text>{'>'}</Text> No. of listing: 4</Text>
         </View>
       </View>

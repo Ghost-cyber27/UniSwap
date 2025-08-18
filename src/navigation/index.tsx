@@ -12,6 +12,7 @@ import { Signup } from './screens/auth/signup';
 import { ForgotPassword } from './screens/auth/forgotPassword';
 import { TabBar } from '../component/TabBar';
 import { Details } from './screens/Details';
+import { ChatDetails } from './screens/ChatDetails';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
@@ -33,6 +34,7 @@ export type AuthStackParamList = {
 export type AppStackParamList = {
   HomeTabs: undefined;
   Details: { Id: string; name: string, price: string, description: string, likes: number, images: string[], seller: string, category: string };
+  ChatDetails: {id: string, username: string, sendername: string, text: string, created_at: string, readMessage: boolean};
 }
 
 interface AppNavigatorProps {
@@ -71,6 +73,7 @@ const AppStackNav: React.FC = () => {
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
       <AppStack.Screen name="HomeTabs" component={HomeTabs} />
       <AppStack.Screen name="Details" component={Details} />
+      <AppStack.Screen name="ChatDetails" component={ChatDetails} />
     </AppStack.Navigator>
   );
 };

@@ -10,7 +10,7 @@ import {
 import { Category, buttonItem } from '../../component/category';
 import { ProductCard } from '../../component/productCard';
 import { useFetch } from '../../services/useFetch';
-import { fetchProduct } from '../../services/fetchData';
+import { fetchProductCategory } from '../../services/fetchData';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { AppStackParamList } from '..';
@@ -18,14 +18,14 @@ import { AppStackParamList } from '..';
 type HomeTabsScreenNavigationProp = NavigationProp<AppStackParamList, 'HomeTabs'>;
 
 export function Home() {
-  const [isFocused, setIsFocused] = useState<string | null>(null);
+  const [isFocused, setIsFocused] = useState<string>("");
   const navigation = useNavigation<HomeTabsScreenNavigationProp>();
 
   const { 
     data, 
     loading: productLoading, 
     error: productError 
-  } = useFetch(() => fetchProduct(isFocused));
+  } = useFetch(() => fetchProductCategory(isFocused));
   
   const category = [
     {title: "All", id: "1", defaultColor: "white", pressedColor: "black"},
@@ -40,7 +40,7 @@ export function Home() {
   const handleButtonPress = (buttonId: string) => {
     console.log("button id: ", buttonId);
     if (buttonId == "1") {
-      setIsFocused(null);
+      setIsFocused("");
       console.log("----------------");
       console.log(isFocused);
     } else if (buttonId == "2") {
